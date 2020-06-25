@@ -1,5 +1,5 @@
 # VHDL
-Working example of SPI protocol used by master and slave devices in VHDL
+Working example of SPI protocol used by master and a slave device
 
 <img src="SPI/Simulation_Waveform/spi.png" width = "250">
 
