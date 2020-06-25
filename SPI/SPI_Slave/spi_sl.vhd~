@@ -1,0 +1,145 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 06/16/2020 09:30:01 PM
+-- Design Name: 
+-- Module Name: spi_sl - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity spi_sl is
+ generic ( USPI_SIZE : integer);
+  Port ( bclk : in std_logic;
+         rstn : in std_logic;
+         done : out std_logic;
+         slsdo : out std_logic;
+         slsdi : in std_logic;
+         slsclk : in std_logic;
+         slcsq : in std_logic;
+         slsndData : in std_logic_vector(USPI_SIZE-1 downto 0);
+         slrcvData : out std_logic_vector(USPI_SIZE-1 downto 0) );
+end spi_sl;
+
+architecture Behavioral of spi_sl is
+type state is (idle, csstart, starthi_s, starthi, startlo_s, startlo, clkhi_s, clk_hi, clklo_s, clklo, leadout);
+signal pr_state, nx_state : state;
+signal count : integer range 0 to USPI_SIZE-1;
+signal sdo_buf : std_logic_vector(USPI_SIZE -1 downto 0);
+signal sdi_buf : std_logic_vector(USPI_SIZE -1 downto 0) := (others => '0');
+
+begin
+
+slrcvData <= sdi_buf;
+
+comb_p : process(pr_state, slcsq, slsclk) 
+begin
+nx_state <= pr_state;
+done <= '0';
+
+case pr_state is
+    when idle =>
+        done <= '1';
+        if (slcsq = '0') then
+            nx_state <= csstart;
+        end if;
+        
+    when csstart =>
+        if ( slsclk = '1') then
+            nx_state <= starthi_s;
+        end if;
+    
+    when starthi_s =>
+        nx_state <= starthi;
+    
+    when starthi =>
+        if (slsclk = '0') then
+            nx_state <= startlo_s;
+        end if;
+        
+    when startlo_s =>
+        nx_state <= startlo;
+        
+    when startlo =>
+        if ( slsclk = '1') then
+            nx_state <= clkhi_s;
+        end if;
+        
+    when clkhi_s =>
+        nx_state <= clk_hi;
+        
+    when clk_hi =>
+        if ( slsclk = '0') then
+            nx_state <= clklo_s;
+        end if;
+        
+    when clklo_s =>
+        nx_state <= clklo;
+        
+    when clklo =>
+        if (count = 0) then
+            nx_state <= leadout;
+        elsif ( slsclk = '1') then
+            nx_state <= clkhi_s;
+        end if;
+        
+    when leadout =>
+         if (slcsq = '1') then
+            nx_state <= idle;
+        end if;
+                 
+end case;
+end process comb_p;
+
+seq_p: process(bclk)
+begin
+    if (rising_edge(bclk)) then
+        if (rstn = '0') then
+            pr_state <= idle;
+        elsif (nx_state = csstart) then
+            count <= USPI_SIZE-1;
+            sdo_buf <= slsndData; 
+        elsif (nx_state = starthi_s) then
+            slsdo <= sdo_buf(USPI_SIZE -1);        
+        elsif (nx_state = startlo_s) then
+            sdi_buf <= sdi_buf(USPI_SIZE -2 downto 0) & slsdi;
+            sdo_buf <= std_logic_vector(shift_left(unsigned(sdo_buf), 1));
+        elsif (nx_state = clkhi_s) then
+            slsdo <= sdo_buf(USPI_SIZE -1);        
+            count <= count - 1;
+        elsif ( nx_state = clklo_s) then
+            sdi_buf <= sdi_buf(USPI_SIZE -2 downto 0) & slsdi;
+            sdo_buf <= std_logic_vector(shift_left(unsigned(sdo_buf), 1));
+        elsif (nx_state = idle) then
+            slsdo <= '0';
+        end if;
+    pr_state <= nx_state;
+    end if;
+end process seq_p;
+
+
+end Behavioral;
