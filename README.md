@@ -1,9 +1,5 @@
 # VHDL
-Working example of SPI protocol used by master and a slave device
 
-<img src="SPI/Simulation_Waveform/spi.png" width = "250">
+SPI communication protocol (master and slave)
 
-Simulation Result
-
-<img src="SPI/Simulation_Waveform/spi_ms_sl.png" width = "300">
-
+Traffic Light Controller at intersection
