@@ -38,23 +38,6 @@ signal timer : integer range 0 to clock_counter_range;
 signal cam_count : integer range 0 to cam_count_value;
 
 begin
-
---state_change: process(rst, clk)
-----variable counter : integer range 0 to clock_counter_range;
---begin
---    if(rst = '1') then
---        pr_state <= idle;
---    elsif(counter < timer) then
---        if (rising_edge(clk)) then
-----            counter := counter + 1;
---            counter <= counter + 1;
---        end if;
---    elsif(counter = timer) then
---        pr_state <= nx_state;
-----        counter := 0;
---        counter <= 0;
---    end if;
---end process state_change;
     
 process (rst, clk, timer, cam_count)
 begin
