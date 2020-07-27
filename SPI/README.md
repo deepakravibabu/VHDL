@@ -21,6 +21,6 @@ simultaneously, reading data from its serial data in port (mosi) on every fallin
 The sclk is generated and transmitted by the master to the slave. The SPI mode chosen is
 CPOL=0 and CPHA=1.
 
-Please refer the sub directories for the program.
+> Please refer the sub directories for the program.
 
 ![Alt text](https://github.com/deepakravibabu/VHDL/blob/master/SPI/Simulation_Waveform/spi.png)
