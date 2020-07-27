@@ -1,4 +1,5 @@
--------------SEQUENCE DETECTOR "11011"-------------
+-- VHDL program to find whenever an expected sequence of input is observered at the ports.
+-------------SEQUENCE TO DETECT "11011"-------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
