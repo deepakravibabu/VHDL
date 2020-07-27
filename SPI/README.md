@@ -24,3 +24,4 @@ CPOL=0 and CPHA=1.
 > Please refer the sub directories for the program.
 
 ![Alt text](https://github.com/deepakravibabu/VHDL/blob/master/SPI/Simulation_Waveform/spi.png)
+![spi_ms_wavf](https://github.com/deepakravibabu/VHDL/blob/master/SPI/Simulation_Waveform/spi_ms_sl.png)
