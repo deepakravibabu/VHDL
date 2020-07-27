@@ -5,3 +5,4 @@
 
 > Please refer the sub directories for the program.
 
+![tf_light](https://github.com/deepakravibabu/VHDL/blob/master/Traffic_Light/Simulation_Waveform/traffic_light_crossroad.png)
