@@ -1,7 +1,7 @@
 # VHDL Program
 ## SPI
 - Serial Peripheral Interface (SPI) is a synchronous communication protocol for devices to communicate in a master-slave relationship
-![seq_det](https://github.com/deepakravibabu/VHDL/blob/master/SPI/Simulation_Waveform/spi_ms_sl.png)
+![seq_det](https://github.com/deepakravibabu/VHDL/blob/master/SPI/Simulation_Waveform/spi_waveform_output.png)
 
 ## Fuel Injector Logic
 - Fuel Injector logic for triggering of the injector and spark signal for every 3rd rotation of camshaft
